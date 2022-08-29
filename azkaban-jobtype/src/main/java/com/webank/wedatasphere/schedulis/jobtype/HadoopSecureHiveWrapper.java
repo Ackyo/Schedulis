@@ -25,7 +25,9 @@ import static org.apache.hadoop.security.UserGroupInformation.HADOOP_TOKEN_FILE_
 import com.webank.wedatasphere.schedulis.jobtype.hiveutils.HiveQueryExecutionException;
 import java.io.File;
 import java.io.IOException;
+import java.security.AccessController;
 import java.security.PrivilegedExceptionAction;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +38,7 @@ import org.apache.hadoop.hive.cli.CliDriver;
 import org.apache.hadoop.hive.cli.CliSessionState;
 import org.apache.hadoop.hive.cli.OptionsProcessor;
 import org.apache.hadoop.hive.conf.HiveConf;
-import org.apache.hadoop.hive.ql.exec.Utilities;
+import org.apache.hadoop.hive.ql.exec.AddToClassPathAction;
 import org.apache.hadoop.hive.ql.session.SessionState;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.slf4j.Logger;
@@ -121,8 +123,8 @@ public class HadoopSecureHiveWrapper {
     logger.info("Got auxJars = " + auxJars);
 
     if (StringUtils.isNotBlank(auxJars)) {
-      loader =
-          Utilities.addToClassPath(loader, StringUtils.split(auxJars, ","));
+      AddToClassPathAction addAction = new AddToClassPathAction(loader, Arrays.asList(StringUtils.split(auxJars, ",")));
+      loader = AccessController.doPrivileged(addAction);
     }
     hiveConf.setClassLoader(loader);
     Thread.currentThread().setContextClassLoader(loader);

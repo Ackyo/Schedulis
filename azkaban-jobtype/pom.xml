@@ -290,14 +290,6 @@
       <artifactId>commons-codec</artifactId>
       <version>1.11</version>
     </dependency>
-
-    <dependency>
-      <groupId>com.webank.wedatasphere.dss</groupId>
-      <artifactId>dss-linkis-node-execution</artifactId>
-      <version>${dss.version}</version>
-      <scope>compile</scope>
-    </dependency>
-
   </dependencies>
 
   <build>

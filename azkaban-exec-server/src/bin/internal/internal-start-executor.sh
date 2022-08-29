@@ -58,10 +58,10 @@ function loadClasspath(){
     CLASSPATH=$CLASSPATH:$HIVE_HOME/conf:$HIVE_HOME/lib/*
   fi
 
-  CLASSPATH=${CLASSPATH}`find $HADOOP_HOME/share/hadoop/common/ -name "*.jar" | grep -v sources | awk '{sum=(sum":"$1)} END {print(sum)}'`
-  CLASSPATH=${CLASSPATH}`find $HADOOP_HOME/share/hadoop/yarn/ -name "*.jar" | grep -v sources | awk '{sum=(sum":"$1)} END {print(sum)}'`
-  CLASSPATH=${CLASSPATH}`find $HADOOP_HOME/share/hadoop/hdfs/ -name "*.jar" | grep -v sources | awk '{sum=(sum":"$1)} END {print(sum)}'`
-  CLASSPATH=${CLASSPATH}`find $HADOOP_HOME/share/hadoop/mapreduce/ -name "*.jar" | grep -v sources | awk '{sum=(sum":"$1)} END {print(sum)}'`
+  CLASSPATH=${CLASSPATH}`find $HADOOP_HOME/ -name "*.jar" | grep -v sources | awk '{sum=(sum":"$1)} END {print(sum)}'`
+  CLASSPATH=${CLASSPATH}`find $HADOOP_HOME-yarn/ -name "*.jar" | grep -v sources | awk '{sum=(sum":"$1)} END {print(sum)}'`
+  CLASSPATH=${CLASSPATH}`find $HADOOP_HOME-hdfs/ -name "*.jar" | grep -v sources | awk '{sum=(sum":"$1)} END {print(sum)}'`
+  CLASSPATH=${CLASSPATH}`find $HADOOP_HOME-mapreduce/ -name "*.jar" | grep -v sources | awk '{sum=(sum":"$1)} END {print(sum)}'`
 
   CLASSPATH=$CLASSPATH:$HADOOP_CONF_DIR
   echo "app home: $azkaban_dir" >> $logFile
