@@ -18,6 +18,7 @@ package com.webank.wedatasphere.schedulis.common.utils;
 
 import azkaban.utils.Props;
 import java.nio.charset.Charset;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.forgerock.opendj.ldap.Connection;
@@ -33,6 +34,12 @@ public class LdapCheckCenter {
   public static boolean checkLogin(Props props, String userName, String password) {
     String ip = props.getString("ladp.ip");
     int port = props.getInt("ladp.port");
+    String userNameFormat = props.getString("ldap.userNameFormat","");
+    String bindDN = userName;
+    if (!StringUtils.isBlank(userNameFormat)) {
+      bindDN = String.format(userNameFormat, userName);
+    }
+
     setupLCF(ip, port);
     Connection conn = null;
     try {
@@ -43,13 +50,13 @@ public class LdapCheckCenter {
     }
     logger.info("LdapCheckCenter LDAP-->Connect to host: " + ip + " success");
 
-    BindRequest request3 = Requests.newSimpleBindRequest(userName , password.getBytes(Charset.defaultCharset()));
+    BindRequest request3 = Requests.newSimpleBindRequest(bindDN , password.getBytes(Charset.defaultCharset()));
     try {
       conn.bind(request3);
-      logger.info("LdapCheckCenter LDAP-->auth " + userName + " success. ");
+      logger.info("LdapCheckCenter LDAP-->auth " + bindDN + " success. ");
       return true;
     } catch (LdapException e) {
-      logger.error("LdapCheckCenter LDAP-->Bind " + userName + " failed.", e);
+      logger.error("LdapCheckCenter LDAP-->Bind " + bindDN + " failed.", e);
       return false;
     }
   }
