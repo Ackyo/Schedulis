@@ -13,7 +13,7 @@ gen
 /.project
 /.settings/
 /.springBeans
-/target/
+*/target/
 /.idea
 .DS_Store
 LICENSE
